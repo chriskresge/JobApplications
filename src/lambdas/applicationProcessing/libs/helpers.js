@@ -1,4 +1,5 @@
 const AWS = require('aws-sdk');
+const dynamoDocClient = require('./dynamoDocClient');
 const {
     get,
     query,
@@ -56,7 +57,7 @@ async function buildResponse(res, status = 200) {
     return response;
 }
 
-async function getAnswers(job) {
+async function getCorrectAnswers(job) {
     var params = {
         Key: {
             "job": job,
@@ -75,7 +76,7 @@ async function checkAnswers(reqParams) {
         Questions,
         job
     } = reqParams;
-    const answerList = await getAnswers(job);
+    const answerList = await getCorrectAnswers(job);
     if (Questions.length != answerList.length) {
         return 'rejected';
     }
@@ -91,8 +92,44 @@ async function checkAnswers(reqParams) {
     return 'accepted';
 
 }
+
+async function saveApplication(application) {
+    let params = {
+        TableName: tableName,
+        Item: application
+    };
+    let result = 'Application Saved';
+    try {
+        let res = await put(params);
+        if (res == 1) {
+            result = "Application saved";
+        } else {
+            result = "Error saving your application; please submit again";
+            console.log("Error writing to DynamoDB");
+        }
+        return result;
+    } catch (e) {
+        console.log('Error writing to DynamoDB:', e);
+        return (e);
+    }
+}
+async function getAcceptedApplicants(job) {
+    let params = {
+        KeyConditionExpression: 'job = :hkey',
+        FilterExpression: 'appStatus = accepted',
+        ExpressionAttributeValues: {
+            ':hkey': job
+        },
+        TableName: tableName
+    };
+    let result = await query(params);
+    return result;
+}
+
 module.exports = {
     buildResponse: (res, status) => buildResponse(res, status),
     processEventParams: (event) => processEventParams(event),
-    checkAnswers: (reqParams) => checkAnswers(reqParams)
+    checkAnswers: (reqParams) => checkAnswers(reqParams),
+    getAcceptedApplicants: (job) => getAcceptedApplicants(job),
+    saveApplication: (application) => saveApplication(application)
 }

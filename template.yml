@@ -51,16 +51,6 @@ Resources:
           Properties:
             Path: /{job}/submit
             Method: POST
-        ApplicationGet:
-          Type: Api
-          Properties:
-            Path: /{job}/{Name}
-            Method: GET
-        ApplicationDelete:
-          Type: Api
-          Properties:
-            Path: /{job}/{Name}
-            Method: DELETE
         EmployerView:
           Type: Api
           Properties:
