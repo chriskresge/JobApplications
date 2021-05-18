@@ -1,5 +1,4 @@
-const AWS = require('aws-sdk');
-const dynamoDocClient = require('./dynamoDocClient');
+'use strict';
 const {
     get,
     query,
@@ -95,7 +94,6 @@ async function checkAnswers(reqParams) {
         };
     }
     return 'accepted';
-
 }
 
 async function saveApplication(application) {

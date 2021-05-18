@@ -1,6 +1,9 @@
-const AWS = require('aws-sdk');
+'use strict';
+const {
+    DocumentClient
+} = require('aws-sdk/clients/dynamodb');
 
-const dynamoClient = new AWS.DynamoDB.DocumentClient();
+const dynamoClient = new DocumentClient();
 
 module.exports = {
     get: (params) => dynamoClient.get(params).promise(),

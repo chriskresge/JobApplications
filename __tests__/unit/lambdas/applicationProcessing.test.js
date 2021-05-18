@@ -1,27 +1,62 @@
+'use strict';
 const lambda = require('../../../applicationProcessing.js');
-const missingQuestion = require('../../../events/missingQuestion.json'); 
-const noJob = require('../../../events/noJob.json');
+const missingQuestion = require('../../../events/missingQuestion.json');
 const nullApp = require('../../../events/nullApp.json');
-const nullName = require('../../../events/nullName.json'); 
+const nullName = require('../../../events/nullName.json');
 const nullQuestions = require('../../../events/nullQuestions.json');
 const validApp = require('../../../events/validApp.json');
 const wrongAnswer = require('../../../events/wrongAnswer.json');
-const {DocumentClient} = require('aws-sdk/clients/dynamodb');
+const {
+    DocumentClient
+} = require('aws-sdk/clients/dynamodb');
 
 const isTest = process.env.JEST_WORKER_ID;
 const config = {
-  convertEmptyValues: true,
-  ...(isTest && {
-    endpoint: 'localhost:8000',
-    sslEnabled: false,
-    region: 'local-env',
-  }),
+    convertEmptyValues: true,
+    ...(isTest && {
+        endpoint: 'localhost:8000',
+        sslEnabled: false,
+        region: 'local-env',
+    }),
 };
 
 const ddb = new DocumentClient(config);
+
 // This includes all tests for applicationProcessing.handler()
 describe('Test for applicationProcessing', function () {
-    // This test invokes applicationProcessing.handler() and compares the result 
+    it('should insert item into table', async () => {
+        await ddb.put({
+            TableName: 'JobApplicationsTable',
+            Item: {
+                job: '1',
+                Name: 'AnswerList',
+                Questions: [
+                    {"Id": "id1", "Question": "Do you have a reliable vehicle?", "Answer": "yes"},
+                    {"Id": "id2", "Question": "Do you have a driver's license?","Answer": "yes"}
+                ] 
+            }
+        }).promise();
+
+        const {
+            Item
+        } = await ddb.get({
+            TableName: 'JobApplicationsTable',
+            Key: {
+                job: '1'
+            }
+        }).promise();
+
+        expect(Item).toEqual({
+            job: '1',
+            Name: 'AnswerList',
+            Questions: [
+                {"Id": "id1", "Question": "Do you have a reliable vehicle?", "Answer": "yes"},
+                {"Id": "id2", "Question": "Do you have a driver's license?","Answer": "yes"}
+            ] 
+        });
+    });
+
+    // This test invokes applicationProcessing.handler() 
     it('Returns bad request: null application', async () => {
         // Invoke applicationProcessing.handler()
         const result = await lambda.handler(nullApp);
@@ -49,7 +84,7 @@ describe('Test for applicationProcessing', function () {
     it('Rejects application: missing question', async () => {
         // Invoke applicationProcessing.handler()
         const result = await lambda.handler(missingQuestion);
-        const expectedResult = 'Application Rejected';
+        const expectedResult = 'rejected';
         // Compare the result with the expected result
         expect(result.body).toEqual(expectedResult);
     });
@@ -57,7 +92,7 @@ describe('Test for applicationProcessing', function () {
     it('Rejects application: wrong answer', async () => {
         // Invoke applicationProcessing.handler()
         const result = await lambda.handler(wrongAnswer);
-        const expectedResult = 'Application Rejected';
+        const expectedResult = 'rejected';
         // Compare the result with the expected result
         expect(result.body).toEqual(expectedResult);
     });
@@ -65,8 +100,8 @@ describe('Test for applicationProcessing', function () {
     it('Accepts application: correct answers', async () => {
         // Invoke applicationProcessing.handler()
         const result = await lambda.handler(missingQuestion);
-        const expectedResult = 'Application Accepted';
+        const expectedResult = 'accepted';
         // Compare the result with the expected result
         expect(result.body).toEqual(expectedResult);
-    });   
+    });
 });
