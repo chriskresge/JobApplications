@@ -22,12 +22,6 @@ POST: https://j8oz69y9v0.execute-api.us-east-1.amazonaws.com/Prod/{job}/submit
 To retrieve passing applications (employer)
 POST: https://j8oz69y9v0.execute-api.us-east-1.amazonaws.com/Prod/{job}/list
 
-## AWS Auth
-AWS Signature Credentialing is required. Credentials for a user with only API Gateway Invoke priviliges:
-secretKey:"e252t8bazj8UguuJAk9cSceABD0GCKcdUooYVxLL",
-accessKey:"AKIAWXLK5FM7KHTYERW2",
-region:"us-east-1"
-
 # JobApplications & SAM CLI: Build and Deploy Instructions From AWS
 
 This project contains source code and supporting files for a serverless application that you can deploy with the AWS Serverless Application Model (AWS SAM) command line interface (CLI). It includes the following files and folders:
