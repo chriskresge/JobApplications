@@ -1,11 +1,14 @@
 {
-    "name": "replaced-by-user-input",
-    "description": "replaced-by-user-input",
+    "name": "job-applications",
+    "description": "API to screen job applicants based on minimum requirements",
     "version": "0.0.1",
     "private": true,
-    "dependencies": {},
+    "dependencies": {
+        "aws-sdk": "^2.908.0"
+    },
     "devDependencies": {
-        "jest": "^26.6.3"
+        "jest": "^26.6.3",
+        "@shelf/jest-dynamodb": "^1.8.1"
     },
     "scripts": {
         "test": "jest"
