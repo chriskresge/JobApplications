@@ -5,6 +5,15 @@ Description: >-
 Transform:
 - AWS::Serverless-2016-10-31
 
+Globals: 
+  Api:
+    Name: job-applications
+    EndpointConfiguration: EDGE
+  Function: 
+    Environment:
+      Variables:
+        TABLE_NAME
+
 Resources:
   JobApplicationsTable:
     Type: "AWS::DynamoDB::Table"
@@ -13,17 +22,22 @@ Resources:
       AttributeDefinitions:
         - AttributeName: job
           AttributeType: S
+        - AttributeName: Name
+          AttributeType: S
       KeySchema:
         - AttributeName: job
           KeyType: HASH
+        - AttributeName: Name
+          KeyType: RANGE
       ProvisionedThroughput:
-        ReadCapacityUnits: 5
-        WriteCapacityUnits: 5
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
 
   JobApplicationFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: src/lambdas/applicationSumbissionHandler
+      Handler: applicationProcessing.handler
+      CodeUri: src/lambdas/applicationProcessing
       Runtime: nodejs14.x
       MemorySize: 128
       Timeout: 100
@@ -37,6 +51,21 @@ Resources:
           Properties:
             Path: /{job}/submit
             Method: POST
+        ApplicationGet:
+          Type: Api
+          Properties:
+            Path: /{job}/{Name}
+            Method: GET
+        ApplicationDelete:
+          Type: Api
+          Properties:
+            Path: /{job}/{Name}
+            Method: DELETE
+        EmployerView:
+          Type: Api
+          Properties:
+            Path: /{job}/list
+            Method: GET
   
             
           
