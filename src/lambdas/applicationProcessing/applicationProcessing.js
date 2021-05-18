@@ -1,3 +1,4 @@
+
 const {
     checkAnswers,
     getAcceptedApplicants,
@@ -6,14 +7,16 @@ const {
     processEventParams
 } = require("./libs/helpers");
 
-module.exports.handler = async (event, context) => {
+module.exports.handler = async (event) => {
     let response, reqParams, results, test;
     try {
         if (event.path.includes('list')) {
             console.log('Retreiving all accepted applicants for job:', event.pathParameters.job);
             results = await getAcceptedApplicants(event.pathParameters.job);
-        } 
-          else {
+        } else if (event.path.includes('criteria')) {
+            reqParams = await processEventParams(event);
+            results = await saveApplication(reqParams);
+        } else {
             reqParams = await processEventParams(event);
             test = await checkAnswers(reqParams);
             reqParams.appStatus = test;

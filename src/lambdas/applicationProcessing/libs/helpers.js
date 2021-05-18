@@ -11,25 +11,25 @@ const tableName = 'JobApplicationsTable';
 async function processEventParams(event) {
     console.log('Validating Request');
     let reqParams = new Object();
-    let valid = false;
 
     // validate request
     if (event.body) {
         let body = JSON.parse(event.body);
         if (event.path.includes('criteria')) {
+            console.log('configuring solution criteria item');
             body.Name = 'AnswerList';
         }
-        if (body.Name && body.Questions && typeof (body.Name) == "string" && Array.isArray(body.Questions) && Array.length(body.Questions) > 0) {
+        if (!body.Name || !body.Questions || typeof body.Name != "string" || !Array.isArray(body.Questions)) {
+            console.log("Bad Request");
+            throw new Error("Bad Request");   
+        } else {
             reqParams = {
                 ...reqParams,
                 ...body
             };
-            valid = true;
         }
     }
-    if (!valid) {
-        throw new Error("Bad Request");
-    }
+
     if (event.pathParameters) {
         reqParams = {
             ...reqParams,
@@ -69,11 +69,10 @@ async function getCorrectAnswers(job) {
             "Name": "AnswerList"
         },
         TableName: tableName,
-        AttributesToGet: "Questions"
     };
     var result = await get(params);
-    console.log(`Question and Answers list for job:${job}:`, JSON.stringify(result));
-    return result;
+    console.log(`Question and Answers list for job:${job}:`, JSON.stringify(result.Questions));
+    return result.Questions;
 }
 
 async function checkAnswers(reqParams) {
@@ -105,14 +104,14 @@ async function saveApplication(application) {
         TableName: tableName,
         Item: application
     };
-    let result = 'Application Saved';
+    let result = 'saved';
     try {
         let res = await put(params);
         if (res == 1) {
-            result = "Application saved";
+            result = 'saved';
         } else {
-            result = "Error saving your application; please submit again";
-            console.log("Error writing to DynamoDB");
+            result = 'Error saving; please submit again';
+            console.log('Error writing to DynamoDB');
         }
         return result;
     } catch (e) {
