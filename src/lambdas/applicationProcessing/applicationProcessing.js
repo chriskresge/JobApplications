@@ -10,8 +10,10 @@ module.exports.handler = async (event, context) => {
     let response, reqParams, results, test;
     try {
         if (event.path.includes('list')) {
+            console.log('Retreiving all accepted applicants for job:', event.pathParameters.job);
             results = await getAcceptedApplicants(event.pathParameters.job);
-        } else {
+        } 
+          else {
             reqParams = await processEventParams(event);
             test = await checkAnswers(reqParams);
             reqParams.appStatus = test;

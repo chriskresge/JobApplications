@@ -8,11 +8,6 @@ Transform:
 Globals: 
   Api:
     Name: job-applications
-    EndpointConfiguration: EDGE
-  Function: 
-    Environment:
-      Variables:
-        TABLE_NAME
 
 Resources:
   JobApplicationsTable:
@@ -56,6 +51,11 @@ Resources:
           Properties:
             Path: /{job}/list
             Method: GET
+        CriteriaPost:
+          Type: Api
+          Properties:
+            Path: /{job}/criteria
+            Method: POST
   
             
           

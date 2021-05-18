@@ -9,12 +9,16 @@ const {
 const tableName = 'JobApplicationsTable';
 
 async function processEventParams(event) {
+    console.log('Validating Request');
     let reqParams = new Object();
     let valid = false;
 
     // validate request
     if (event.body) {
         let body = JSON.parse(event.body);
+        if (event.path.includes('criteria')) {
+            body.Name = 'AnswerList';
+        }
         if (body.Name && body.Questions && typeof (body.Name) == "string" && Array.isArray(body.Questions) && Array.length(body.Questions) > 0) {
             reqParams = {
                 ...reqParams,
@@ -35,14 +39,13 @@ async function processEventParams(event) {
 
     // add date of application
     reqParams.date = new Date();
-
-    // add application status
-    reqParams.appStatus = 'received';
+    console.log('Request valid');
 
     return reqParams;
 }
 
 async function buildResponse(res, status = 200) {
+    console.log('building HTTP Response')
     let response = {
         headers: {
             "Access-Control-Allow-Origin": "*",
@@ -52,12 +55,14 @@ async function buildResponse(res, status = 200) {
         statusCode: status,
         multiValueHeaders: {},
         isBase64Encoded: false,
-        body: res,
     };
+    response.body = JSON.stringify(res);
+    console.log("response:", JSON.stringify(response));
     return response;
 }
 
 async function getCorrectAnswers(job) {
+    console.log('Retrieving correct answers from DynamoDB');
     var params = {
         Key: {
             "job": job,
@@ -72,6 +77,7 @@ async function getCorrectAnswers(job) {
 }
 
 async function checkAnswers(reqParams) {
+    console.log('Checking application answers');
     const {
         Questions,
         job
@@ -94,6 +100,7 @@ async function checkAnswers(reqParams) {
 }
 
 async function saveApplication(application) {
+    console.log('saving application to DynamoDB');
     let params = {
         TableName: tableName,
         Item: application
