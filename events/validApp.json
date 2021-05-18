@@ -1,5 +1,5 @@
 {
-    "body": "{\"Name\":\"Applicant\",\"Questions\":[{\"Id\":\"id10\", \"Answer\": \"string\"}]}",
+    "body": "{\"Name\": \"Applicant\",\"Questions\": [{\"Id\": \"id1\", \"Answer\": \"yes\"},{\"Id\": \"id2\", \"Answer\": \"yes\"}]}",
     "resource": "/{job}/submit",
     "path": "/1/submit",
     "httpMethod": "POST",
