@@ -28,7 +28,7 @@ async function processEventParams(event) {
             };
         }
     }
-
+    //isolate job number as param
     if (event.pathParameters) {
         reqParams = {
             ...reqParams,
@@ -43,6 +43,7 @@ async function processEventParams(event) {
     return reqParams;
 }
 
+//build API Gateway response
 async function buildResponse(res, status = 200) {
     console.log('building HTTP Response')
     let response = {
@@ -60,6 +61,7 @@ async function buildResponse(res, status = 200) {
     return response;
 }
 
+// loads correct answers
 async function getCorrectAnswers(job) {
     console.log('Retrieving correct answers from DynamoDB');
     var params = {

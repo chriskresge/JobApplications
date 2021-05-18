@@ -5,6 +5,7 @@ const {
 
 const dynamoClient = new DocumentClient();
 
+
 module.exports = {
     get: (params) => dynamoClient.get(params).promise(),
     put: (params) => dynamoClient.put(params).promise(),

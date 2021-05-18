@@ -6,26 +6,13 @@ const nullName = require('../../../events/nullName.json');
 const nullQuestions = require('../../../events/nullQuestions.json');
 const validApp = require('../../../events/validApp.json');
 const wrongAnswer = require('../../../events/wrongAnswer.json');
-const {
-    DocumentClient
-} = require('aws-sdk/clients/dynamodb');
 
-const isTest = process.env.JEST_WORKER_ID;
-const config = {
-    convertEmptyValues: true,
-    ...(isTest && {
-        endpoint: 'localhost:8000',
-        sslEnabled: false,
-        region: 'local-env',
-    }),
-};
 
-const ddb = new DocumentClient(config);
 
 // This includes all tests for applicationProcessing.handler()
 describe('Test for applicationProcessing', function () {
     it('should insert item into table', async () => {
-        await ddb.put({
+        await put({
             TableName: 'JobApplicationsTable',
             Item: {
                 job: '1',
