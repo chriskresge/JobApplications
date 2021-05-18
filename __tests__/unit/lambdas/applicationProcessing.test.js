@@ -1,4 +1,6 @@
-const lambda = require('../../../src/lambdas/applicationProcessing.js');
+const AWS = require('aws-sdk');
+jest.mock('aws-sdk');
+const lambda = require('../../../applicationProcessing.js');
 const missingQuestion = require('../../../events/missingQuestion.json'); 
 const noJob = require('../../../events/noJob.json');
 const nullApp = require('../../../events/nullApp.json');

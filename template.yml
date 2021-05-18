@@ -32,7 +32,6 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: applicationProcessing.handler
-      CodeUri: src/lambdas/applicationProcessing
       Runtime: nodejs14.x
       MemorySize: 128
       Timeout: 100

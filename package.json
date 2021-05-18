@@ -3,6 +3,10 @@
     "description": "API to screen job applicants based on minimum requirements",
     "version": "0.0.1",
     "private": true,
+    "jest": {
+        "verbose": true,
+        "automock": true
+    },
     "dependencies": {
         "aws-sdk": "^2.908.0"
     },
