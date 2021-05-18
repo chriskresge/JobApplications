@@ -40,6 +40,8 @@ Resources:
       Policies:
         - AWSLambdaBasicExecutionRole
         - AmazonDynamoDBFullAccess
+        - DynamoDBCrudPolicy:
+            TableName: JobApplicationsTable
       Events:
         ApplicationPost:
           Type: Api
