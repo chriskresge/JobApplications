@@ -71,8 +71,8 @@ async function getCorrectAnswers(job) {
         TableName: tableName,
     };
     var result = await get(params);
-    console.log(`Question and Answers list for job:${job}:`, JSON.stringify(result.Questions));
-    return result.Questions;
+    console.log(`Question and Answers list for job:${job}:`, JSON.stringify(result));
+    return result;
 }
 
 async function checkAnswers(reqParams) {
@@ -104,16 +104,9 @@ async function saveApplication(application) {
         TableName: tableName,
         Item: application
     };
-    let result = 'saved';
     try {
         let res = await put(params);
-        if (res == 1) {
-            result = 'saved';
-        } else {
-            result = 'Error saving; please submit again';
-            console.log('Error writing to DynamoDB');
-        }
-        return result;
+        return 'saved';
     } catch (e) {
         console.log('Error writing to DynamoDB:', e);
         return (e);

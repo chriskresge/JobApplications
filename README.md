@@ -1,4 +1,26 @@
-# JobApplications
+# JobApplications API
+
+The Job Applications API receives and stores employer criteria for minimum qualifications for a particular job, and uses that data to screen potential candidates. Prospective employees submit their applications to the API, which are then "graded" to ensure all questions are answered correctly. The application is accepted or rejected, and employers are able to access the applications of all passing applicants.
+
+The API is built using node.js 14.x and is hosted on AWS Lambda, using API Gateway, DynamoDB, and CloudWatch for HTTP endpoint configuration, data persistence, and logging, respectively. 
+
+# API Endpoints and Requests
+API Gateway Invoke URL:
+https://j8oz69y9v0.execute-api.us-east-1.amazonaws.com/Prod/{job}/{endpoint}
+
+## Endpoints:
+To add solutions list (employer)
+POST: https://j8oz69y9v0.execute-api.us-east-1.amazonaws.com/Prod/{job}/criteria
+
+To submit application (employee)
+POST: https://j8oz69y9v0.execute-api.us-east-1.amazonaws.com/Prod/{job}/submit
+
+To retrieve passing applications (employer)
+POST: https://j8oz69y9v0.execute-api.us-east-1.amazonaws.com/Prod/{job}/list
+
+
+
+# JobApplications & SAM CLI
 
 This project contains source code and supporting files for a serverless application that you can deploy with the AWS Serverless Application Model (AWS SAM) command line interface (CLI). It includes the following files and folders:
 
