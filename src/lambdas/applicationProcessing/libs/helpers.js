@@ -71,8 +71,8 @@ async function getCorrectAnswers(job) {
         TableName: tableName,
     };
     var result = await get(params);
-    console.log(`Question and Answers list for job:${job}:`, JSON.stringify(result));
-    return result;
+    console.log(`Question and Answers list for job:${job}:`, JSON.stringify(result.Item.Questions));
+    return result.Item.Questions;
 }
 
 async function checkAnswers(reqParams) {
@@ -115,9 +115,10 @@ async function saveApplication(application) {
 async function getAcceptedApplicants(job) {
     let params = {
         KeyConditionExpression: 'job = :hkey',
-        FilterExpression: 'appStatus = accepted',
+        FilterExpression: 'appStatus = :s',
         ExpressionAttributeValues: {
-            ':hkey': job
+            ':hkey': job,
+            ':s': 'accepted'
         },
         TableName: tableName
     };
