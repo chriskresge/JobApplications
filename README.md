@@ -5,6 +5,10 @@ The Job Applications API receives and stores employer criteria for minimum quali
 The API is built using node.js 14.x and is hosted on AWS Lambda, using API Gateway, DynamoDB, and CloudWatch for HTTP endpoint configuration, data persistence, and logging, respectively. 
 
 # API Endpoints and Requests
+
+A Postman Collection with example requests is here:
+https://www.getpostman.com/collections/79f2b38ac57fe9b4ee0c
+
 API Gateway Invoke URL:
 https://j8oz69y9v0.execute-api.us-east-1.amazonaws.com/Prod/{job}/{endpoint}
 
@@ -18,7 +22,11 @@ POST: https://j8oz69y9v0.execute-api.us-east-1.amazonaws.com/Prod/{job}/submit
 To retrieve passing applications (employer)
 POST: https://j8oz69y9v0.execute-api.us-east-1.amazonaws.com/Prod/{job}/list
 
-
+## AWS Auth
+AWS Signature Credentialing is required. Credentials for a user with only API Gateway Invoke priviliges:
+secretKey:"e252t8bazj8UguuJAk9cSceABD0GCKcdUooYVxLL",
+accessKey:"AKIAWXLK5FM7KHTYERW2",
+region:"us-east-1"
 
 # JobApplications & SAM CLI
 
